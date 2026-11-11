@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-test.describe.serial('Полный CRUD цикл (POST -> GET -> PUT -> PATCH -> DELETE)', () => {
+test.describe.serial('Crud', () => {
   let createdId: string;
 
-  test('1. CREATE — создание нового объекта (POST /objects)', async ({ request }) => {
+  test('create', async ({ request }) => {
     const payload = {
       name: 'Apple MacBook Pro 16',
       data: {
@@ -11,7 +11,7 @@ test.describe.serial('Полный CRUD цикл (POST -> GET -> PUT -> PATCH ->
         price: 2499.99,
         color: 'Space Black',
       },
-    };
+    }; 
 
     const response = await request.post('/objects', { data: payload });
     expect(response.status()).toBe(200);
@@ -24,7 +24,7 @@ test.describe.serial('Полный CRUD цикл (POST -> GET -> PUT -> PATCH ->
     createdId = body.id;
   });
 
-  test('2. READ — получение созданного объекта по ID (GET /objects/:id)', async ({ request }) => {
+  test('read', async ({ request }) => {
     const response = await request.get(`/objects/${createdId}`);
     expect(response.status()).toBe(200);
 
@@ -33,7 +33,7 @@ test.describe.serial('Полный CRUD цикл (POST -> GET -> PUT -> PATCH ->
     expect(body.name).toBe('Apple MacBook Pro 16');
   });
 
-  test('3. UPDATE — полное обновление объекта (PUT /objects/:id)', async ({ request }) => {
+  test('update', async ({ request }) => {
     const updatedPayload = {
       name: 'Apple MacBook Pro 16 (Updated)',
       data: {
@@ -51,7 +51,7 @@ test.describe.serial('Полный CRUD цикл (POST -> GET -> PUT -> PATCH ->
     expect(body.data).toEqual(updatedPayload.data);
   });
 
-  test('4. PATCH — частичное обновление поля (PATCH /objects/:id)', async ({ request }) => {
+  test('patch', async ({ request }) => {
     const patchPayload = {
       name: 'Apple MacBook Pro 16 (Patched)',
     };
@@ -64,7 +64,7 @@ test.describe.serial('Полный CRUD цикл (POST -> GET -> PUT -> PATCH ->
     expect(body.data.color).toBe('Silver');
   });
 
-  test('5. DELETE — удаление объекта и проверка 404 (DELETE /objects/:id)', async ({ request }) => {
+  test('delete', async ({ request }) => {
     const deleteResponse = await request.delete(`/objects/${createdId}`);
     expect(deleteResponse.status()).toBe(200);
 
